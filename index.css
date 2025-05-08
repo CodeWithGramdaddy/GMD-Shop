@@ -187,29 +187,44 @@ body {
   }
 @media (max-width: 768px) {
     .hamburger {
-        display: flex;
-    }
-
-    .nav-links {
+        display: block !important;
+      }
+    
+      .nav-links {
         display: none;
         position: absolute;
         top: 60px;
+        left: 0;
         right: 0;
-        background: #2c3e50;
+        background: #fff;
         flex-direction: column;
-        width: 200px;
-        padding: 10px;
-        border-radius: 5px;
-        z-index: 99;
-    }
-
-    .nav-links.show {
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        color: black;
+      }
+    
+      .nav-links.show {
         display: flex;
-    }
+      }
+    
+      .nav-links li {
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        color: black;
+      }
+      .nav-links li a {
+        color: black;
+      }
+    
+      .nav-container {
+        position: relative;
+      }
 
-    .nav-links li {
-        margin: 10px 0;
-    }
+    
+
     .cart-btn {
         position: fixed;
         bottom: 20px;
@@ -222,6 +237,16 @@ body {
         background-color: #ff6347;
       }
 }
+/* Hamburger icon - hidden on desktop */
+.hamburger {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  
+  
 
 /* .card-container {
     display: grid;

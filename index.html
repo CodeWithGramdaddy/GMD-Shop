@@ -12,13 +12,15 @@
     <div class="nav-container">
       <div class="logo">🛍️ G.M.D-Shop</div>
       <nav>
-        <ul class="nav-links">
+        <div class="hamburger" id="hamburger">&#9776;</div>
+        <ul class="nav-links" id="navLinks">
           <li><a href="#">Home</a></li>
           <li><a href="#">Products</a></li>
           <li><a href="#">About</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
       </nav>
+      
       <div class="cart-btn">🛒 Cart</div>
     </div>
   </header>
@@ -207,6 +209,18 @@
 
     getProducts();
     updateCartUI();
+   
+  document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+    });
+  });
+
+
+
   </script>
 </body>
 </html>
