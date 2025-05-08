@@ -412,7 +412,7 @@ button:active {
         flex-direction: row;
         align-items: center;
         width: 100%;
-        gap: 3em;
+        gap: 5em;
     }
 
     #loginBtn, #signupBtn {
