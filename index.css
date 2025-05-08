@@ -408,6 +408,17 @@ button:active {
     .logo{
         font-size: 1.4em;
     }
+    .auth-btns {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        gap: 3em;
+    }
+
+    #loginBtn, #signupBtn {
+        width: 80%; /* Adjust width to make buttons responsive */
+        max-width: 300px;
+    }
 
     .nav-links {
         display: none;
