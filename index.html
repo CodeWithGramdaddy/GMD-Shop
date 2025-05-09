@@ -17,9 +17,9 @@
                 <div class="logo">
                     <p>🛍️ G.M.D-Shop</p>
                 </div>
-                <button class="hamburger" id="hamburgerBtn">
+                <div class="hamburger" id="hamburgerBtn">
                     <i class="fas fa-bars"></i> <!-- Font Awesome Hamburger Icon -->
-                </button>
+                </div>
             </div>
             <nav>
                 <ul id="navLinks" class="nav-links">
@@ -92,6 +92,8 @@
 
         let allProducts = [];
         let cart = [];
+        let cartLoaded = false;
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -128,6 +130,8 @@
                 // Fetch the cart from Firebase when the user is signed in
                 getCartFromFirebase().then((cartItems) => {
                     cart = cartItems;
+                    cartLoaded = true;
+
                     updateCartUI();
                     displayCart();
                 });
@@ -277,6 +281,14 @@
             searchInput.addEventListener("input", applyFilters);
             categoryFilter.addEventListener("change", applyFilters);
         }
+        document.querySelector(".cart-btn").addEventListener("click", () => {
+            if (!cartLoaded) {
+                alert("Cart is still loading. Please wait...");
+                return;
+            }
+            displayCart();
+            document.getElementById("cartModal").style.display = "block";
+        });
 
         // Display the cart content in the modal
         async function displayCart() {
@@ -308,6 +320,7 @@
             });
 
             cartTotal.innerText = `Total: $${total.toFixed(2)}`;
+
 
             document.querySelectorAll(".remove-btn").forEach(button => {
                 button.addEventListener("click", () => {
@@ -355,9 +368,6 @@
         getProducts();
         updateCartUI();
 
-        document.querySelector(".cart-btn").addEventListener("click", () => {
-            document.getElementById("cartModal").style.display = "block";
-        });
 
         document.getElementById("closeCart").addEventListener("click", () => {
             document.getElementById("cartModal").style.display = "none";
