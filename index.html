@@ -116,42 +116,42 @@
 
 
 
-        // Handle user authentication state and cart on page load
         onAuthStateChanged(auth, (user) => {
-            const authBtns = document.getElementById("authBtns");
-            const userInfo = document.getElementById("userInfo");
+  const authBtns = document.getElementById("authBtns");
+  const userInfo = document.getElementById("userInfo");
 
-            if (user) {
-                // User is signed in
-                authBtns.style.display = "none"; // Hide login and signup buttons
-                userInfo.style.display = "block"; // Show user info container
-                document.getElementById("welcomeMsg").textContent = `Welcome, ${user.displayName || user.email}`;
+  if (user) {
+    // User is signed in
+    authBtns.style.display = "none"; // Hide login and signup buttons
+    userInfo.style.display = "block"; // Show user info container
+    document.getElementById("welcomeMsg").textContent = `Welcome, ${user.displayName || user.email}`;
+    
+    // Fetch the cart from Firebase when the user is signed in
+    getCartFromFirebase().then((cartItems) => {
+      cart = cartItems;
+      cartLoaded = true;
 
-                // Fetch the cart from Firebase when the user is signed in
-                getCartFromFirebase().then((cartItems) => {
-                    cart = cartItems;
-                    cartLoaded = true;
+      updateCartUI();
+      displayCart();
+    });
 
-                    updateCartUI();
-                    displayCart();
-                });
+    // Add sign out button functionality
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        // User signed out
+        authBtns.style.display = "flex"; // Show login and signup buttons
+        userInfo.style.display = "none"; // Hide user info container
+        cart = []; // Clear the cart when logged out
+        updateCartUI(); // Update cart UI to reflect an empty cart
+      });
+    });
+  } else {
+    // User is not signed in
+    authBtns.style.display = "flex"; // Show login and signup buttons
+    userInfo.style.display = "none"; // Hide user info container
+  }
+});
 
-                // Add sign out button functionality
-                document.getElementById("logoutBtn").addEventListener("click", () => {
-                    signOut(auth).then(() => {
-                        // User signed out
-                        authBtns.style.display = "flex"; // Show login and signup buttons
-                        userInfo.style.display = "none"; // Hide user info container
-                        cart = []; // Clear the cart when logged out
-                        updateCartUI(); // Update cart UI to reflect an empty cart
-                    });
-                });
-            } else {
-                // User is not signed in
-                authBtns.style.display = "flex"; // Show login and signup buttons
-                userInfo.style.display = "none"; // Hide user info container
-            }
-        });
 
         // Retrieve cart from Firebase
         async function getCartFromFirebase() {
@@ -336,33 +336,41 @@
         }
 
         // Checkout
-        document.getElementById("checkoutBtn").addEventListener("click", () => {
-            if (cart.length === 0) {
-                alert("Your cart is empty!");
-                return;
-            }
+        // Checkout
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
 
-            let message = "Hello, I'd like to order:\n";
-            cart.forEach(item => {
-                message += `\n- ${item.title} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`;
-            });
+    let message = "Hello, I'd like to order:\n";
+    cart.forEach(item => {
+        message += `\n- ${item.title} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`;
+    });
 
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            message += `\n\nTotal: $${total.toFixed(2)}`;
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    message += `\n\nTotal: $${total.toFixed(2)}`;
 
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/2348026942766?text=${encodedMessage}`;
+    // Fetch the user's email (if logged in)
+    const userEmail = auth.currentUser ? auth.currentUser.email : "Guest";
 
-            window.open(whatsappURL, "_blank");
+    // Add user's email to the message
+    message += `\n\nUser Email: ${userEmail}`;
 
-            cart = [];
-            if (auth.currentUser) {
-                setDoc(doc(db, "carts", auth.currentUser.uid), { items: [] });
-            }
-            updateCartUI();
-            displayCart();
-            document.getElementById("cartModal").style.display = "none";
-        });
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/2348026942766?text=${encodedMessage}`;
+
+    window.open(whatsappURL, "_blank");
+
+    cart = [];
+    if (auth.currentUser) {
+        setDoc(doc(db, "carts", auth.currentUser.uid), { items: [] });
+    }
+    updateCartUI();
+    displayCart();
+    document.getElementById("cartModal").style.display = "none";
+});
+
 
         // Initialize
         getProducts();
