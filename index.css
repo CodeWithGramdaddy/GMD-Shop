@@ -245,6 +245,16 @@ nav a:hover {
         opacity: 0;
         transition: opacity 0.5s ease, visibility 0.5s;
     }
+        .auth-btns {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+    }
+     #loginBtn, #signupBtn {
+        width: 48%; /* Equal width with small spacing */
+        max-width: none;
+    }
+
 }
 
 /* Card Styles */
@@ -396,6 +406,23 @@ button:active {
 .auth-btns {
     display: flex;
     gap: 10px;
+}
+#loginBtn, #signupBtn {
+    font-weight: bold;
+    text-transform: uppercase;
+    flex: 1 1 150px; /* allow them to grow/shrink but start with 150px */
+    max-width: 200px; /* prevent them from getting too wide */
+    min-width: 120px; /* prevent them from getting too narrow */
+    width: 100%;
+    text-align: center;
+}
+
+.auth-btns {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
 }
 
 /* Hamburger icon (Mobile) */
